@@ -23,9 +23,11 @@ class FormScreen: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
+        FormScreenRouter().createModule(self)
+
         manageDropDown()
         textViewComment?.delegate = self
         textViewComment?.addDoneButton(title: "Done", target: self, selector: #selector(tapDone(sender:)))
@@ -35,32 +37,15 @@ class FormScreen: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        textFieldEmail?.becomeFirstResponder()
        
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-              if self.view.frame.origin.y == 0 {
-                  self.view.frame.origin.y -= keyboardSize.height
-              }
-         }
-     }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if ((notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
-              if self.view.frame.origin.y != 0 {
-                  self.view.frame.origin.y = 0
-              }
-         }
-     }
-    
-    @IBAction func dropDownClicked(_ sender: Any) {
+   @IBAction func dropDownClicked(_ sender: Any) {
         dropDown.show()
         dropDown.selectionAction = {[unowned self] (index: Int, item: String) in
             btnDropDown?.setTitle(item, for: .normal)
         }
-        dropDown.bottomOffset = CGPoint(x: viewDropDown?.frame.origin.x ?? 0, y:(viewDropDown?.frame.origin.y ?? 0) + (viewDropDown?.frame.size.height ?? 0) + 100)
+        dropDown.bottomOffset = CGPoint(x: viewDropDown?.frame.origin.x ?? 0, y:(viewDropDown?.frame.origin.y ?? 0) + (viewDropDown?.frame.size.height ?? 0))
     }
     
     @IBAction func btnSubmitClicked(_ sender: Any) {
@@ -92,11 +77,12 @@ class FormScreen: UIViewController {
     }
     
     func manageDropDown() {
+
         dropDown.anchorView = view
-        dropDown.dataSource = ["Car", "Motorcycle", "Truck"]
+        dropDown.dataSource = presenter?.getList() ?? []
+
         dropDown.direction = .bottom
         dropDown.dismissMode = .onTap
-        FormScreenRouter().createModule(self)
     }
     
     @objc func tapDone(sender: Any) {
@@ -112,4 +98,21 @@ extension FormScreen: UITextViewDelegate {
         return filtered != string
     }
     
+}
+extension FormScreen {
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+              if self.view.frame.origin.y == 0 {
+                  self.view.frame.origin.y -= keyboardSize.height
+              }
+         }
+     }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if ((notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+              if self.view.frame.origin.y != 0 {
+                  self.view.frame.origin.y = 0
+              }
+         }
+     }
 }

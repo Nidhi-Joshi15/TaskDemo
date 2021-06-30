@@ -37,6 +37,10 @@ class FormScreenPresenter: FormScreenPresenterProtocol {
     func navigateToListScreen() {
         router?.navigateToListViewController()
     }
+    
+    func getList() -> [String] {
+        return ["Dubai", "Abu Dhabi", "Sarjah"]
+    }
 }
 
 
@@ -49,5 +53,6 @@ protocol FormScreenPresenterProtocol {
     
     func updateToggleStatus() -> String
     func navigateToListScreen()
+    func getList() -> [String]
     func getToggleStatus() -> SelectToggle
 }

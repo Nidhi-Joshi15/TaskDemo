@@ -19,10 +19,10 @@ class ListScreenViewController: UIViewController {
     }
     
     private func registerTableViewCells() {
-        let textFieldCell = UINib(nibName: "DataCell",
+        let textFieldCell = UINib(nibName: Constant.DataCellIdentifier,
                                   bundle: nil)
         tableView?.register(textFieldCell,
-                                forCellReuseIdentifier: "DataCell")
+                                forCellReuseIdentifier: Constant.DataCellIdentifier)
         tableView?.estimatedRowHeight = 400.0
         tableView?.rowHeight = UITableView.automaticDimension
     }
@@ -47,7 +47,7 @@ extension ListScreenViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell
-                = tableView.dequeueReusableCell(withIdentifier: "DataCell") as? DataCell
+                = tableView.dequeueReusableCell(withIdentifier: Constant.DataCellIdentifier) as? DataCell
         cell?.loadData(data: presenter?.getDataforIndex(indexPath.row))
         cell?.layoutIfNeeded()
         return cell ?? UITableViewCell()

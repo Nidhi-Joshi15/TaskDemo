@@ -14,4 +14,5 @@ class Constant {
     }
     
     static let InvalidEmail = "Invalid Email"
+    static let DataCellIdentifier = "DataCell"
 }
