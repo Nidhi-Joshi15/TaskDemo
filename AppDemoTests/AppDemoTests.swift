@@ -29,5 +29,13 @@ class AppDemoTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
+    
+    func testValidHost() {
+        let expected = expectation(description: "Check valid host")
+        if Utilities.ConnectedToNetwork() {
+            expected.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+    }
 
 }
